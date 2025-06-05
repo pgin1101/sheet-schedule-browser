@@ -1,16 +1,30 @@
 [
   {
     "date": "2025-07-15",
-    "time": "09:30",
+    "time": "08:00",
     "title": "Flight to NYC",
-    "location": "JFK Airport",
-    "note": "Check-in 2 hr early"
+    "location": "TPE Airport",
+    "note": "Arrive 2h early for baggage drop"
   },
   {
     "date": "2025-07-15",
+    "time": "14:30",
+    "title": "Check-in at hotel",
+    "location": "Hilton Midtown, NYC",
+    "note": "Reserve room under ID 1234"
+  },
+  {
+    "date": "2025-07-16",
+    "time": "09:00",
+    "title": "MoMA visit",
+    "location": "Museum of Modern Art",
+    "note": "Book tickets online"
+  },
+  {
+    "date": "2025-07-16",
     "time": "13:00",
-    "title": "Check-in Hotel",
-    "location": "Hotel NYC",
-    "note": ""
+    "title": "Central Park picnic",
+    "location": "Central Park",
+    "note": "Bring sandwiches and drinks"
   }
 ]

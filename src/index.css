@@ -1,3 +1,4 @@
+/* src/index.css 只能放這三行，並且不要在其他 .css 檔裡出現 @tailwind 相關指令 */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
