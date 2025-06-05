@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import './i18n'
-import Timeline, { ItineraryItem } from './Timeline'
+import Timeline, { type ItineraryItem } from './Timeline'
 import sample from './sampleItinerary.json'
 import './App.css'
 
