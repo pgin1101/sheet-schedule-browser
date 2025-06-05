@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2025-07-15",
+    "time": "09:30",
+    "title": "Flight to NYC",
+    "location": "JFK Airport",
+    "note": "Check-in 2 hr early"
+  },
+  {
+    "date": "2025-07-15",
+    "time": "13:00",
+    "title": "Check-in Hotel",
+    "location": "Hotel NYC",
+    "note": ""
+  }
+]
