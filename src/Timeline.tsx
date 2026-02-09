@@ -1,5 +1,4 @@
 // src/Timeline.tsx
-import React from 'react'
 
 export interface ItineraryItem {
   date: string    // e.g. "2025-07-15"
@@ -61,7 +60,7 @@ export default function Timeline({ items }: TimelineProps) {
                     </h3>
                   </div>
                   {/* 地點 */}
-                  <div className="mb-1"> ㄋ
+                  <div className="mb-1"> 
                     <span className="text-sm text-gray-600">
                       {item.location.trim()}
                     </span>

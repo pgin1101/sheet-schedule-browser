@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react'
-import Timeline, { ItineraryItem } from './Timeline'
+import Timeline from './Timeline'
+import type { ItineraryItem } from './Timeline'
 import { describe, it, expect } from 'vitest'
 
 const items: ItineraryItem[] = [
