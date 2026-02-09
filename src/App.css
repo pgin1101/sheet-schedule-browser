@@ -1,5 +1,58 @@
-/* src/App.css */
-.custom-header {
-  letter-spacing: 0.05em;
+:root {
+  color-scheme: light;
+  --app-ink: #0f172a;
+  --app-muted: #64748b;
+  --app-panel-bg: rgba(255, 255, 255, 0.88);
+  --app-bg-a: #f6fbff;
+  --app-bg-b: #eff8f4;
+  --app-bg-c: #eef2ff;
 }
-/* 不要再有 @tailwind base/… */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Noto Sans TC', 'PingFang TC', 'Avenir Next', 'Segoe UI', sans-serif;
+  color: var(--app-ink);
+  background:
+    radial-gradient(1200px 600px at 8% 6%, #dff2ff 0%, transparent 55%),
+    radial-gradient(1000px 500px at 92% 0%, #e6f9ef 0%, transparent 52%),
+    linear-gradient(165deg, var(--app-bg-a) 0%, var(--app-bg-b) 45%, var(--app-bg-c) 100%);
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  position: relative;
+}
+
+.app-aurora {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(500px 260px at 18% 24%, rgba(34, 211, 238, 0.16), transparent 70%),
+    radial-gradient(520px 280px at 84% 30%, rgba(59, 130, 246, 0.1), transparent 72%);
+}
+
+.app-panel {
+  position: relative;
+  background: var(--app-panel-bg);
+  backdrop-filter: saturate(1.2) blur(8px);
+}
+
+.segmented {
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
+}
+
+@media (max-width: 767px) {
+  .app-shell {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
+  }
+}
