@@ -5,138 +5,7 @@ import sample from './sampleItinerary.json'
 import './index.css'
 import './App.css'
 import MarketDashboard from './MarketDashboard'
-
-type ParsedSheetInput = {
-  sheetId: string
-  gid?: string
-}
-
-function parseSheetInput(raw: string): ParsedSheetInput | null {
-  const input = raw.trim()
-  if (!input) return null
-
-  if (/^[a-zA-Z0-9-_]{20,}$/.test(input)) {
-    return { sheetId: input }
-  }
-
-  try {
-    const url = new URL(input)
-    const match = url.pathname.match(/\/spreadsheets\/d\/([a-zA-Z0-9-_]+)/)
-    if (!match) {
-      throw new Error('invalid sheet url')
-    }
-
-    const gid = url.searchParams.get('gid') ?? undefined
-    return { sheetId: match[1], gid }
-  } catch {
-    throw new Error('請輸入公開 Google Sheet 連結或 Sheet ID')
-  }
-}
-
-function buildCsvUrl(sheet: ParsedSheetInput): string {
-  const gidQuery = sheet.gid ? `&gid=${encodeURIComponent(sheet.gid)}` : ''
-  return `https://docs.google.com/spreadsheets/d/${sheet.sheetId}/export?format=csv${gidQuery}`
-}
-
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = []
-  let cell = ''
-  let row: string[] = []
-  let inQuotes = false
-
-  for (let i = 0; i < text.length; i += 1) {
-    const char = text[i]
-
-    if (char === '"') {
-      if (inQuotes && text[i + 1] === '"') {
-        cell += '"'
-        i += 1
-      } else {
-        inQuotes = !inQuotes
-      }
-      continue
-    }
-
-    if (!inQuotes && char === ',') {
-      row.push(cell.trim())
-      cell = ''
-      continue
-    }
-
-    if (!inQuotes && (char === '\n' || char === '\r')) {
-      if (char === '\r' && text[i + 1] === '\n') {
-        i += 1
-      }
-      row.push(cell.trim())
-      cell = ''
-      if (row.some((value) => value.length > 0)) {
-        rows.push(row)
-      }
-      row = []
-      continue
-    }
-
-    cell += char
-  }
-
-  if (cell.length > 0 || row.length > 0) {
-    row.push(cell.trim())
-    if (row.some((value) => value.length > 0)) {
-      rows.push(row)
-    }
-  }
-
-  return rows
-}
-
-function toItineraryItems(csvText: string): ItineraryItem[] {
-  const rows = parseCsv(csvText)
-  if (rows.length < 2) {
-    throw new Error('CSV 內容不足，請確認 Sheet 至少有標題列與一筆資料')
-  }
-
-  const headers = rows[0].map((h, index) => {
-    const clean = h.trim().toLowerCase()
-    return index === 0 ? clean.replace(/^\uFEFF/, '') : clean
-  })
-
-  const indexOf = (aliases: string[]): number => headers.findIndex((h) => aliases.includes(h))
-
-  const dateIndex = indexOf(['date', '日期'])
-  const timeIndex = indexOf(['time', '時間'])
-  const titleIndex = indexOf(['title', '標題', 'event', '行程'])
-  const locationIndex = indexOf(['location', '地點'])
-  const noteIndex = indexOf(['note', '備註'])
-
-  if ([dateIndex, timeIndex, titleIndex, locationIndex].some((idx) => idx < 0)) {
-    throw new Error('CSV 欄位需包含 date/time/title/location（可用中文欄名：日期/時間/標題/地點）')
-  }
-
-  const items = rows
-    .slice(1)
-    .map((cols) => {
-      const date = cols[dateIndex]?.trim() ?? ''
-      const time = cols[timeIndex]?.trim() ?? ''
-      const title = cols[titleIndex]?.trim() ?? ''
-      const location = cols[locationIndex]?.trim() ?? ''
-      const note = noteIndex >= 0 ? cols[noteIndex]?.trim() ?? '' : ''
-
-      if (!date || !time || !title || !location) {
-        return null
-      }
-
-      const item: ItineraryItem = { date, time, title, location }
-      if (note) item.note = note
-      return item
-    })
-    .filter((item): item is ItineraryItem => item !== null)
-
-  if (items.length === 0) {
-    throw new Error('資料列缺少必要欄位內容，無法轉成行程')
-  }
-
-  return items
-}
+import { buildCsvUrl, parseSheetInput, toItineraryItems } from './sheetParser'
 
 function App() {
   const [items, setItems] = useState<ItineraryItem[]>(sample as ItineraryItem[])
@@ -220,7 +89,7 @@ function App() {
             </div>
 
             <p className="text-sm text-gray-500 mb-4">
-              欄位需包含 date、time、title、location，或使用中文欄名 日期、時間、標題、地點。
+              支援 date/time/title/location 直式欄位，也支援 Day 1~Day N 橫向行程表。
             </p>
 
             {error && <p className="mb-4 text-sm text-red-600">{error}</p>}
